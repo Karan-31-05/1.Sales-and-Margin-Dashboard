@@ -1,0 +1,177 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 1451.1251360174103,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 529,
+            "y": 402.5
+          },
+          "nodeIndex": "Revenue",
+          "nodeLineageTag": "126dd58a-ac9e-4d2e-862f-9afcbe1b0445",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 37,
+            "y": 0
+          },
+          "nodeIndex": "Product",
+          "nodeLineageTag": "ada0392d-3eb4-4763-b714-8d37ecb62f71",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 938,
+            "y": 0
+          },
+          "nodeIndex": "Date",
+          "nodeLineageTag": "d0919e67-5c71-4a99-924c-1b49dcce90aa",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 228,
+            "y": 300
+          },
+          "nodeIndex": "Expenses",
+          "nodeLineageTag": "20f720a4-6809-4ec2-92e5-233cb93acd6b",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 327.79997253417969,
+            "y": 0
+          },
+          "nodeIndex": "AccountHeader",
+          "nodeLineageTag": "8dda7967-e49c-4dbe-a0ab-40709282e9ff",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 652,
+            "y": 0
+          },
+          "nodeIndex": "Account",
+          "nodeLineageTag": "fb33b89a-a3a8-423c-9394-8599e887cdf8",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1130,
+            "y": 249.5
+          },
+          "nodeIndex": "keyMeasure",
+          "nodeLineageTag": "b124d7e0-f07a-4dc3-a742-f2bbb71c4f61",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 1377,
+            "y": 239.25
+          },
+          "nodeIndex": "WIF Expenses",
+          "nodeLineageTag": "c316af58-cd91-45f7-9b92-341c12cf2169",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1624,
+            "y": 239.25
+          },
+          "nodeIndex": "WIF Cost",
+          "nodeLineageTag": "89b99789-c04c-4042-b812-efc5e13d4d20",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2118,
+            "y": 239.25
+          },
+          "nodeIndex": "WIF Unit Price",
+          "nodeLineageTag": "842478c5-8cd3-4c12-abd8-3047971db0e3",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2365,
+            "y": 239.25
+          },
+          "nodeIndex": "WIF Qty",
+          "nodeLineageTag": "aa505148-9763-4383-b325-0e24ca4b6dc5",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2612,
+            "y": 251.25
+          },
+          "nodeIndex": "Whatif",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 66.982507288629733,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

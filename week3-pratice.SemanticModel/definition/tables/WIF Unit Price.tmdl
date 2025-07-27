@@ -1,0 +1,26 @@
+table 'WIF Unit Price'
+	lineageTag: 842478c5-8cd3-4c12-abd8-3047971db0e3
+
+	measure 'WIF Unit Price Value' = SELECTEDVALUE('WIF Unit Price'[WIF Unit Price], 0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e194d746-aed4-4a30-a9fe-0f872f375fa0
+
+	column 'WIF Unit Price'
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 00f49157-4e0d-48e8-b6d7-4c572ea0353a
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'WIF Unit Price' = calculated
+		mode: import
+		source = GENERATESERIES(-1, 1, 0.05)
+
+	annotation PBI_Id = 7d3dd15deeb64d67b49beb783252eb5c
+

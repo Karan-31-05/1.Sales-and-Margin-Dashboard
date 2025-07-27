@@ -1,0 +1,172 @@
+table Revenue
+	lineageTag: 126dd58a-ac9e-4d2e-862f-9afcbe1b0445
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 0167407d-8aef-42e3-aa3a-1586ccc70f84
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		variation Variation
+			isDefault
+			relationship: 538dd80e-fd89-4bf4-9079-d4a47fd55b83
+			defaultHierarchy: LocalDateTable_7077585a-4fad-4e7b-8bbd-8c0530354ff2.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Due Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 90b7adf6-1bb8-4418-bc49-dcb2b9029f0b
+		summarizeBy: none
+		sourceColumn: Due Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Order Number'
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b89a717-080e-4dab-b5bd-74da19c9f271
+		summarizeBy: sum
+		sourceColumn: Order Number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 33eddc09-a654-495d-9963-281699bd4cd2
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Salesperson ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: 5f169462-548a-40e4-84a8-7628a39db441
+		summarizeBy: count
+		sourceColumn: Salesperson ID
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Salesperson
+		dataType: string
+		lineageTag: 4029b47b-98db-4993-8575-5334b0bce6dd
+		summarizeBy: none
+		sourceColumn: Salesperson
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supervisor
+		dataType: string
+		lineageTag: 1b292e47-cc9c-4c3b-b3de-44029f0377b1
+		summarizeBy: none
+		sourceColumn: Supervisor
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Team
+		dataType: string
+		lineageTag: bed8f797-1194-44db-bfac-d4371d19a00d
+		summarizeBy: none
+		sourceColumn: Team
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Qty Items'
+		dataType: int64
+		formatString: 0
+		lineageTag: d881b9f3-f5c7-4880-ac65-cd42b1ed5cc0
+		summarizeBy: sum
+		sourceColumn: Qty Items
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Price'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 2d166c64-93b2-4127-bb69-b309322dd8cb
+		summarizeBy: sum
+		sourceColumn: Unit Price
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column 'Sales Amount'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: e0795536-5cc7-4e5b-bdd6-6e6906d5d1e6
+		summarizeBy: sum
+		sourceColumn: Sales Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column RevenueAccountID
+		dataType: string
+		lineageTag: 11a6d238-1579-4e99-a671-025e07da8c06
+		summarizeBy: none
+		sourceColumn: RevenueAccountID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CostAccountID
+		dataType: string
+		lineageTag: 8bbfb8f6-11b0-427f-bef8-c2170f3960c4
+		summarizeBy: none
+		sourceColumn: CostAccountID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Revenue = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\karan\OneDrive\Desktop\Power BI\Doc\PowerBIWeek_Lesson01\Database\Revenue.xlsx"), null, true),
+				    Revenue_Sheet = Source{[Item="Revenue",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Revenue_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Sales Report", type any}, {"Column2", type any}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"Column6", type text}, {"Column7", type text}, {"Column8", type text}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [Column4] <> null and [Column4] <> ""),
+				    #"Promoted Headers1" = Table.PromoteHeaders(#"Filtered Rows", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers1",{{"Order Date", type date}, {"Due Date", type date}, {"Order Number", Int64.Type}, {"Product ID", Int64.Type}, {"Salesperson ID", Int64.Type}, {"Salesperson", type text}, {"Supervisor", type text}, {"Team", type text}, {"Qty Items", Int64.Type}, {"Unit Price", type number}, {"Sales Amount", type number}}),
+				    #"Added Custom" = Table.AddColumn(#"Changed Type1", "RevenueAccountID", each "1.01.01"),
+				    #"Added Custom1" = Table.AddColumn(#"Added Custom", "CostAccountID", each "2.02.01")
+				in
+				    #"Added Custom1"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

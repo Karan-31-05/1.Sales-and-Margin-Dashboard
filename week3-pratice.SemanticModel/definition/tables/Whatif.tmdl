@@ -1,0 +1,105 @@
+table Whatif
+	lineageTag: a68155ce-f0de-4992-a211-489d8de983d2
+
+	measure 'WIF Revenue' = [Revenue] * (1 + 'WIF Qty'[WIF Qty Value] ) * (1 + 'WIF Unit Price'[WIF Unit Price Value])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 7b435d85-a209-4d65-ab48-31290629b722
+
+	measure 'WIF Cost' = [Cost] * (1 + 'WIF Cost'[WIF Cost Value]) * (1 + 'WIF Qty'[WIF Qty Value])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: c20fb100-f266-434b-8d25-dacd68654a13
+
+	measure 'WIF Expenses' = Expenses[Expense] * (1 + 'WIF Expenses'[WIF Expenses Value])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 6505145a-5103-4948-9eb8-32888f741db8
+
+	measure 'WIF Operational Income' = [WIF Revenue] - [WIF Cost] - [WIF Expenses]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: df8d6577-7e27-4f71-bd23-a86462b944f0
+
+	measure 'WIF PnL' = ```
+			
+			VAR vRT = 
+			CALCULATE(
+			    [WIF Operational Income],
+			    FILTER(
+			        ALL(AccountHeader),
+			        AccountHeader[HeaderID] <= MAX(AccountHeader[HeaderID])
+			    )
+			)
+			VAR vSubtotal = MAX(AccountHeader[Subtotal])
+			VAR vSubheader = ISINSCOPE(Account[Subheader Account])
+			RETURN
+			SWITCH(
+			    vSubtotal,
+			    0, [WIF Operational Income],
+			    1, IF( vSubheader = TRUE(), BLANK(), vRT),
+			    BLANK()
+			)
+			
+			    
+			```
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: c55e8a50-f3bb-40b6-a0cb-096eddc85d33
+
+	measure 'VAR Cost' = [WIF Cost] - [Cost]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: f3e03beb-22be-4c47-b917-fe8b0ca3ef1f
+
+	measure 'VAR Revenue' = [WIF Revenue] - [Revenue]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 19aa6796-b1d3-4d33-ba9b-7d73b1f2b220
+
+	measure 'VAR Expenses' = [WIF Expenses] - Expenses[Expense]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 401a83e5-3d37-43a4-9941-303f1b79c87d
+
+	measure 'VAR Income' = [WIF Operational Income] - [Operational Income]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: fe043e7f-1b2d-412c-948c-0478cbaee645
+
+	measure 'VAR Income %' =
+			
+			DIVIDE(
+			    [VAR Income],
+			    ABS([Operational Income])
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: e2dc03c5-3ded-4f93-93d9-b800a2e1f771
+
+	measure 'VAR PnL %' =
+			
+			DIVIDE(
+			    [WIF PnL] - [PnL],
+			    [PnL]
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: bfd03850-a457-4a09-a64d-80af0ccdb0dd
+
+	measure 'Income KPI' =
+			
+			SWITCH(
+			    TRUE(),
+			    [VAR Income] > 0, "✅",
+			    [VAR Income] < 0, "❌",
+			    "⚠️"
+			)
+		lineageTag: 9cd11732-5fc8-4a6a-811c-2d3b33b1de89
+
+	column Column
+		formatString: 0
+		lineageTag: 6489d63b-a6de-439d-b9b2-fdf359515ebd
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Whatif = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 25a75b8f117b4ea39af9ba3ba6b5abf9
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

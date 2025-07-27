@@ -1,0 +1,39 @@
+relationship 538dd80e-fd89-4bf4-9079-d4a47fd55b83
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Revenue.'Order Date'
+	toColumn: LocalDateTable_7077585a-4fad-4e7b-8bbd-8c0530354ff2.Date
+
+relationship cdd072e6-8884-1678-4674-6e1f61d8ba98
+	fromColumn: Revenue.'Product ID'
+	toColumn: Product.'Product ID'
+
+relationship 62467be7-0db8-47b4-9fc6-6ac87ccdb7d1
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Date.Date
+	toColumn: LocalDateTable_36718a32-7129-484e-8285-3d70a9625c9a.Date
+
+relationship fe0b62d1-1171-2a43-1096-4036c9ae12e9
+	fromColumn: Revenue.'Due Date'
+	toColumn: Date.Date
+
+relationship AutoDetected_0c79abb0-8623-40fe-b9c3-5a7988b217a3
+	fromColumn: Expenses.'Account ID'
+	toColumn: Account.AccountID
+
+relationship f02abd58-6fd5-73aa-5324-a527c74aa9b1
+	fromColumn: Account.HeaderID
+	toColumn: AccountHeader.HeaderID
+
+relationship 29f8f74d-4453-da90-5cea-40d0a4885bdc
+	fromColumn: Revenue.RevenueAccountID
+	toColumn: Account.AccountID
+
+relationship c1749aad-6219-7743-4e3b-1178be4c9128
+	isActive: false
+	fromColumn: Revenue.CostAccountID
+	toColumn: Account.AccountID
+
+relationship 87c5fd1f-9385-7270-ce90-a75b8a389a78
+	fromColumn: Expenses.Month
+	toColumn: Date.Date
+

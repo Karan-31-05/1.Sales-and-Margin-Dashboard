@@ -1,0 +1,135 @@
+table keyMeasure
+	lineageTag: b124d7e0-f07a-4dc3-a742-f2bbb71c4f61
+
+	measure Gross = [Revenue] - [Cost]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 52a4f7ec-ee70-4d57-9406-d9ac48a8d46b
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure Cost =
+			CALCULATE(SUMX(Revenue, Revenue[Qty Items] * RELATED('Product'[Unit Cost])),
+			    USERELATIONSHIP(Account[AccountID], Revenue[CostAccountID])
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 802f98d2-f236-4a7d-9906-f97f57d2fa77
+
+	measure 'Best Month' = "Best month " & SELECTEDVALUE('Date'[MonthName])
+		lineageTag: a067891a-6821-4eca-86d3-1d24da5ff237
+
+	measure Revenue = SUM(Revenue[Sales Amount])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: fada5a21-cc44-44ac-ab36-b3df89ab30e8
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'GM %' = DIVIDE([Gross], [Revenue])
+		formatString: 0%;-0%;0%
+		lineageTag: 2f4bfccc-9cb1-4691-bd8a-daa222bcb761
+
+	measure 'Revenue Drinks' =
+			
+			CALCULATE(
+			    [Revenue],
+			    'Product'[Category] = "Drinks"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: eaa3a238-7b87-4ca3-b58d-9749c9f65735
+
+	measure '% revenue' =
+			(
+			    DIVIDE(
+			        [Revenue],
+			CALCULATE(
+			    [Revenue],
+			    ALL(Revenue)
+			)))
+		formatString: 0%;-0%;0%
+		lineageTag: cf3eb9ff-5f6d-4b93-b89a-c7ba2cbf4dec
+
+	measure 'Operational Income' = [Revenue] - [Cost] - [Expense]
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: 7e6f1998-6fd2-40ac-9a3f-b501f2f60697
+
+	measure PnL = ```
+			
+			VAR vRT = 
+			CALCULATE(
+			    [Operational Income],
+			    FILTER(
+			        ALL(AccountHeader),
+			        AccountHeader[HeaderID] <= MAX(AccountHeader[HeaderID])
+			    )
+			)
+			VAR vSubtotal = MAX(AccountHeader[Subtotal])
+			VAR vSubheader = ISINSCOPE(Account[Subheader Account])
+			RETURN
+			SWITCH(
+			    vSubtotal,
+			    0, [Operational Income],
+			    1, IF( vSubheader = TRUE(), BLANK(), vRT),
+			    BLANK()
+			)
+			
+			    
+			```
+		formatString: #,0
+		lineageTag: f51c4c1f-8bb1-4b29-bf2d-a5080687a130
+
+		annotation PBI_FormatHint = {"isDecimal":true}
+
+	measure VA = ```
+			
+			VAR vCPnL = [PnL]
+			VAR vPnL = 
+			CALCULATE(
+			    [PnL],
+			    AccountHeader[Header Account] = "GROSS REVENUE",
+			    ALL(AccountHeader))
+			    
+			    RETURN
+			    DIVIDE(
+			        vCPnL, vPnL
+			    )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 5d65748a-d366-428d-bfc5-e637f0b102d4
+
+	measure HA = ```
+			
+			VAR vCPnL = [PnL]
+			VAR vPPnL = 
+			CALCULATE(
+			    [PnL],
+			    DATEADD('Date'[Date], -1, MONTH)
+			)
+			
+			RETURN
+			DIVIDE(
+			    vCPnL - vPPnL,
+			    ABS(vPPnL)
+			)
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: ce0aebc0-6836-4df8-8df5-b086f8b30bcb
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: 2f2e7cda-0ec1-43c3-a45e-8ff92bb06ce0
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition keyMeasure = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 2cc7469cfa0f4d85bc010628f0bab28e
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

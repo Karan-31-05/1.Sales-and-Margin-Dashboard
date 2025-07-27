@@ -1,0 +1,62 @@
+table Account
+	lineageTag: fb33b89a-a3a8-423c-9394-8599e887cdf8
+
+	column AccountID
+		dataType: string
+		lineageTag: 4e192d44-c84c-4359-9139-0aa466b2e09a
+		summarizeBy: none
+		sourceColumn: AccountID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Detailed Account'
+		dataType: string
+		lineageTag: ae56f995-8197-4e62-8ab8-916920bbc8fd
+		summarizeBy: none
+		sourceColumn: Detailed Account
+		sortByColumn: AccountID
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubheaderID
+		dataType: string
+		lineageTag: 991f68b6-6bbc-4588-ad5f-84a090c50f75
+		summarizeBy: none
+		sourceColumn: SubheaderID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Subheader Account'
+		dataType: string
+		lineageTag: 7b640445-6439-46b0-b8a2-3b116cb1d181
+		summarizeBy: none
+		sourceColumn: Subheader Account
+		sortByColumn: SubheaderID
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column HeaderID
+		dataType: string
+		lineageTag: 3f530d56-1dac-4be8-a1e2-b9a0a29089bc
+		summarizeBy: none
+		sourceColumn: HeaderID
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Account = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\karan\OneDrive\Desktop\Power BI\Doc\PowerBIWeek_Lesson01\Database\Accounts.xlsx"), null, true),
+				    dAccount_Table = Source{[Item="dAccount",Kind="Table"]}[Data]
+				in
+				    dAccount_Table
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

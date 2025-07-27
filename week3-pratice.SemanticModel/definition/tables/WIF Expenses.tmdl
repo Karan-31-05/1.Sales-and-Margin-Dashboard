@@ -1,0 +1,26 @@
+table 'WIF Expenses'
+	lineageTag: c316af58-cd91-45f7-9b92-341c12cf2169
+
+	measure 'WIF Expenses Value' = SELECTEDVALUE('WIF Expenses'[WIF Expenses], 0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 14e28406-e377-4720-a810-c88006e3e5c6
+
+	column 'WIF Expenses'
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: f1d746b7-0516-4aa2-b3a1-7e11916cb783
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'WIF Expenses' = calculated
+		mode: import
+		source = GENERATESERIES(-1, 1, 0.05)
+
+	annotation PBI_Id = d9275b5bdd244c1f903d10f967480372
+

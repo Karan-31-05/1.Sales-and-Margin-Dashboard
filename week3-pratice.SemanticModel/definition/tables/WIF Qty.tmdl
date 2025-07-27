@@ -1,0 +1,26 @@
+table 'WIF Qty'
+	lineageTag: aa505148-9763-4383-b325-0e24ca4b6dc5
+
+	measure 'WIF Qty Value' = SELECTEDVALUE('WIF Qty'[WIF Qty], 0)
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: b9adf257-0ae3-487e-b4fb-b263bea2cbfd
+
+	column 'WIF Qty'
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: 8438a99b-41c1-4e13-b417-deb20e6fdd28
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 0
+				}
+
+		annotation SummarizationSetBy = User
+
+	partition 'WIF Qty' = calculated
+		mode: import
+		source = GENERATESERIES(-1, 1, 0.05)
+
+	annotation PBI_Id = 8a81a34fa22a4d90a3b3e7e343cc04fa
+

@@ -1,0 +1,61 @@
+table Expenses
+	lineageTag: 20f720a4-6809-4ec2-92e5-233cb93acd6b
+
+	measure Expense = SUM(Expenses[Value])
+		formatString: \$#,0;(\$#,0);\$#,0
+		lineageTag: b80cf63d-413c-4d35-9042-161c76b2730d
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column 'Account ID'
+		dataType: string
+		lineageTag: c54ea968-1381-4cde-8260-bf3cc4998154
+		summarizeBy: none
+		sourceColumn: Account ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: f3764bb3-36ce-479c-b6d0-c81ce643ba54
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Value
+		dataType: int64
+		formatString: 0
+		lineageTag: 607b074c-ad06-47c8-a0fb-102ba803c9da
+		summarizeBy: sum
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Expenses = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\karan\OneDrive\Desktop\Power BI\Doc\PowerBIWeek_Lesson01\Database\Expenses.xlsx"), null, true),
+				    Expenses_Sheet = Source{[Item="Expenses",Kind="Sheet"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Expenses_Sheet,{{"Column1", type text}, {"Column2", type text}, {"Column3", type any}, {"Column4", type any}, {"Column5", type any}, {"Column6", type any}, {"Column7", type any}, {"Column8", type any}, {"Column9", type any}, {"Column10", type any}, {"Column11", type any}, {"Column12", type any}, {"Column13", type any}, {"Column14", type any}, {"Column15", type any}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type", each [Column15] <> null and [Column15] <> ""),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Filtered Rows", [PromoteAllScalars=true]),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Promoted Headers",{{"Account ID", type text}, {"Account", type text}, {"Jan/19", Int64.Type}, {"Feb/19", Int64.Type}, {"Mar/19", Int64.Type}, {"Apr/19", Int64.Type}, {"May/19", Int64.Type}, {"Jun/19", Int64.Type}, {"Jul/19", Int64.Type}, {"Aug/19", Int64.Type}, {"Sep/19", Int64.Type}, {"Oct/19", Int64.Type}, {"Nov/19", Int64.Type}, {"Dec/19", Int64.Type}, {"Total", Int64.Type}}),
+				    #"Duplicated Column" = Table.DuplicateColumn(#"Changed Type1", "Account ID", "Account ID - Copy"),
+				    #"Calculated Text Length" = Table.TransformColumns(#"Duplicated Column",{{"Account ID - Copy", Text.Length, Int64.Type}}),
+				    #"Filtered Rows1" = Table.SelectRows(#"Calculated Text Length", each ([#"Account ID - Copy"] = 7)),
+				    #"Removed Columns" = Table.RemoveColumns(#"Filtered Rows1",{"Account", "Total", "Account ID - Copy"}),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Removed Columns", {"Account ID"}, "Attribute", "Value"),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Unpivoted Other Columns",{{"Attribute", type date}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type2",{{"Attribute", "Month"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

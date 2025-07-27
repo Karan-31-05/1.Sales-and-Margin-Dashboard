@@ -1,0 +1,47 @@
+table AccountHeader
+	lineageTag: 8dda7967-e49c-4dbe-a0ab-40709282e9ff
+
+	column HeaderID
+		dataType: double
+		lineageTag: 0804a106-7537-4595-bcff-033bb22d117d
+		summarizeBy: none
+		sourceColumn: HeaderID
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Header Account'
+		dataType: string
+		lineageTag: 252aa846-36dd-4653-943a-24212a1c4fd4
+		summarizeBy: none
+		sourceColumn: Header Account
+		sortByColumn: HeaderID
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subtotal
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f8fe8c6-eade-4b43-af29-378ef462ab6a
+		summarizeBy: none
+		sourceColumn: Subtotal
+
+		annotation SummarizationSetBy = Automatic
+
+	partition AccountHeader = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\karan\OneDrive\Desktop\Power BI\Doc\PowerBIWeek_Lesson01\Database\Accounts.xlsx"), null, true),
+				    dAccountHeader_Table = Source{[Item="dAccountHeader",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(dAccountHeader_Table,{{"HeaderID", type number}, {"Header Account", type text}, {"Subtotal", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

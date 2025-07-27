@@ -1,0 +1,69 @@
+table Product
+	lineageTag: ada0392d-3eb4-4763-b714-8d37ecb62f71
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: 84bd4c7b-aa83-4c13-b71b-449732705c29
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product
+		dataType: string
+		lineageTag: 0cfc825c-2ba9-43b2-98f7-76e6e4539929
+		summarizeBy: none
+		sourceColumn: Product
+
+		annotation SummarizationSetBy = Automatic
+
+	column Group
+		dataType: string
+		lineageTag: bbcda74b-b216-4401-847a-0add0392323a
+		summarizeBy: none
+		sourceColumn: Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: f6ce23ae-5aa7-4c1c-a31c-6ef8678bc3ff
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Supplier
+		dataType: string
+		lineageTag: ad50e213-29ba-4209-b4f3-153b14999835
+		summarizeBy: none
+		sourceColumn: Supplier
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Unit Cost'
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 17bec752-c0e8-4705-8e9a-37787c23b279
+		summarizeBy: none
+		sourceColumn: Unit Cost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	partition Product = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\karan\OneDrive\Desktop\Power BI\Doc\PowerBIWeek_Lesson01\Database\Product.xlsx"), null, true),
+				    dProduct_Table = Source{[Item="dProduct",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(dProduct_Table,{{"Product ID", type text}, {"Product", type text}, {"Group", type text}, {"Category", type text}, {"Supplier", type text}, {"Unit Cost", type number}}),
+				    #"Extracted Text After Delimiter" = Table.TransformColumns(#"Changed Type", {{"Product ID", each Text.AfterDelimiter(_, " "), type text}})
+				in
+				    #"Extracted Text After Delimiter"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
